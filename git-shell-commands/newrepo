@@ -1,0 +1,14 @@
+#!/bin/bash
+
+#TODO: sanitize repo
+
+repo=$1
+
+if [[ ! $repo == *.git ]];
+then 
+  repo+=".git"
+fi
+
+mkdir -p ~/$repo
+cd ~/$repo
+git init --bare
