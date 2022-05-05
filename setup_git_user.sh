@@ -13,5 +13,12 @@ su -c 'cd && mkdir .ssh && chmod 700 .ssh' git
 su -c 'cd && touch .ssh/authorized_keys && chmod 600 .ssh/authorized_keys' git
 su -c "cd && echo $MY_PUB_KEY >> .ssh/authorized_keys" git
 
+# copy git-shell-commands
+sudo cp -r git-shell-commands /home/git
+
+# change permission of git shell commands
+sudo chown -R git:git /home/git/git-shell-commands
+su -c "chmod +x /home/git/git-shell-commands/*" git
+
 # change shell to git-shell
 sudo chsh git -s $(which git-shell)
