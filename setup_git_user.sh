@@ -13,3 +13,5 @@ su -c 'cd && mkdir .ssh && chmod 700 .ssh' git
 su -c 'cd && touch .ssh/authorized_keys && chmod 600 .ssh/authorized_keys' git
 su -c "cd && echo $MY_PUB_KEY >> .ssh/authorized_keys" git
 
+# change shell to git-shell
+sudo chsh git -s $(which git-shell)
