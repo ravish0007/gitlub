@@ -10,20 +10,22 @@ const app = express()
 
 app.use(bodyParser.json())
 
-app.post('/new', (req, res) => {
+app.post('/new', async (req, res) => {
   if (!req.body.repository) {
     return res.send(400).json({ message: 'repository not found' })
   }
 
-  exec(`sshpass -p ${process.env.gitpass} ssh git@${process.env.gitserver} newrepo`, (error, stdout, stderr) => {
-    if (error) {
-      return res.send(500).json({ message: `${error.message}` })
-    }
+  try {
+    const { stdout, stderr } = await exec(`sshpass -p ${process.env.gitpass} ssh git@${process.env.gitserver} newrepo ${req.body.repository}`)
+
     if (stderr) {
       return res.send(449).json({ message: `${stderr}` })
     }
     return res.send(201).json({ message: `${stdout}` })
-  })
+  } catch (err) {
+    console.log(err)
+    return res.send(500).json({ message: `${err}` })
+  }
 })
 
 app.listen(5000, () => console.log('listening on 5000'))
