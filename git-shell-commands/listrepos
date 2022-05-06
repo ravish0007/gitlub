@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ls $HOME | grep .git | cut -d '.' -f 1 | sort
