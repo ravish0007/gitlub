@@ -1,7 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const { exec } = require('child_process')
+const util = require('util')
+const exec = util.promisify(require('child_process').exec)
 
 require('dotenv').config()
 
