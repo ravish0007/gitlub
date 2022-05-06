@@ -42,4 +42,22 @@ app.get('/repos', async (req, res) => {
   }
 })
 
+app.get('/log/:repository', async (req, res) => {
+  if (!req.params.repository) {
+    return res.send(400).json({ message: 'repository not found' })
+  }
+
+  try {
+    const { stdout, stderr } = await exec(`sshpass -p ${process.env.gitpass} ssh git@${process.env.gitserver} logrepo ${req.params.repository}`)
+
+    return res.status(200).send({ log: stdout })
+  } catch (err) {
+    console.log(err)
+    if (err.stderr) {
+      return res.status(200).send({ log: 'No commits yet' })
+    }
+    return res.status(500).send({ message: `${err}` })
+  }
+})
+
 app.listen(5000, () => console.log('listening on 5000'))
