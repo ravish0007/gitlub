@@ -21,7 +21,7 @@ app.post('/new', async (req, res) => {
     if (stderr) {
       return res.send(449).json({ message: `${stderr}` })
     }
-    return res.send(201).json({ message: `${stdout}` })
+    return res.status(201).send({ message: `${stdout}` })
   } catch (err) {
     console.log(err)
     return res.send(500).json({ message: `${err}` })
