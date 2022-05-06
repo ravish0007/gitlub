@@ -28,4 +28,18 @@ app.post('/new', async (req, res) => {
   }
 })
 
+app.get('/repos', async (req, res) => {
+  try {
+    const { stdout, stderr } = await exec(`sshpass -p ${process.env.gitpass} ssh git@${process.env.gitserver} listrepos`)
+
+    if (stderr) {
+      return res.send(449).json({ message: `${stderr}` })
+    }
+    return res.status(201).send({ repositories: stdout.trim().split('\n') })
+  } catch (err) {
+    console.log(err)
+    return res.send(500).json({ message: `${err}` })
+  }
+})
+
 app.listen(5000, () => console.log('listening on 5000'))
