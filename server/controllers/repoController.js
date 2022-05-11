@@ -2,7 +2,7 @@
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
-const GIT_EXEC = `sshpass -p ${process.env.gitpass} ssh git@${process.env.gitserver}`
+const GIT_EXEC = `sshpass -p ${process.env.GITPASS} ssh git@${process.env.GITSERVER}`
 
 async function createRepository (req, res) {
   if (!req.body.repository) {
