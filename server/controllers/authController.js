@@ -55,5 +55,6 @@ async function verifyUser (req, res) {
 }
 
 module.exports = {
-  createUser
+  createUser,
+  verifyUser
 }
