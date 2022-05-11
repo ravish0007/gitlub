@@ -3,8 +3,6 @@ const exec = util.promisify(require('child_process').exec)
 
 const path = require('path')
 
-require('dotenv').config()
-
 async function setupUser (user) {
   await exec(`adduser --disabled-password --gecos "" ${user.name}`)
   await exec(`su -c 'cd && mkdir .ssh && chmod 700 .ssh' ${user.name}`)
@@ -15,7 +13,6 @@ async function setupUser (user) {
   await exec(`su -c 'cd && echo ${keyPrefix + process.env.AGENT_PUB_KEY} >> .ssh/authorized_keys' ${user.name}`)
   await exec(`su -c 'cd && echo ${keyPrefix + user.sshKey} >> .ssh/authorized_keys' ${user.name}`)
 
-  // sudo cp -r git-shell-commands /home/git
   await exec(`cp -r ${path.join(process.cwd(), 'git-shell-commands')} /home/${user.name}`)
 
   //  change permission of git shell commands
@@ -23,7 +20,7 @@ async function setupUser (user) {
   await exec(`su -c 'chmod +x /home/${user.name}/git-shell-commands/*' ${user.name}`)
 
   //  change shell to git-shell
-  await exec('chsh git -s $(which git-shell)')
+  await exec(`chsh ${user.name} -s $(which git-shell)`)
 }
 
 module.exports = setupUser
