@@ -14,6 +14,6 @@ const app = express()
 app.use(cors({ origin: process.env.UI_ROOT, credentials: true }))
 app.use(bodyParser.json())
 
-app.use(repoRoute)
+app.use('/api/repo', repoRoute)
 
 app.listen(5000, () => console.log('listening on 5000'))
