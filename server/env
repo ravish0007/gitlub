@@ -1,0 +1,13 @@
+DATABASE_USER=<db username>
+DATABASE_PASSWORD=<db password>
+DATABASE_PORT=<db port>
+DATABASE=<db name>
+
+SERVER_PORT=<server port>
+
+
+
+GITPASS=<git user's password>
+GITSERVER=<git server domain/ip>
+UI_ROOT=<frontend's url>
+
