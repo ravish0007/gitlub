@@ -31,7 +31,7 @@ async function verifyUser (req, res) {
 
   if (!username || !password) return res.status(400).json({ message: 'Username and password are required.' })
 
-  const [error, foundUser] = await userModel.getPassword(username)
+  const [error, foundUser] = await userModel.getUser(username)
 
   if (!foundUser.length) return res.sendStatus(401) // Unauthorized
 
