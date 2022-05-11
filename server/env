@@ -5,7 +5,7 @@ DATABASE=<db name>
 
 SERVER_PORT=<server port>
 
-
+SESSION_SECRET=<session secret>
 
 GITPASS=<git user's password>
 GITSERVER=<git server domain/ip>

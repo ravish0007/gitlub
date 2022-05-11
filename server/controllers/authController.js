@@ -26,6 +26,35 @@ async function createUser (req, res) {
   }
 }
 
+async function verifyUser (req, res) {
+  const { username, password } = req.body
+
+  if (!username || !password) return res.status(400).json({ message: 'Username and password are required.' })
+
+  const [error, foundUser] = await userModel.getUser(username)
+
+  if (!foundUser.length) return res.sendStatus(401) // Unauthorized
+
+  const user = foundUser[0]
+
+  // evaluate password
+  const match = await bcrypt.compare(password, user.password)
+  if (match) {
+    // create session
+    req.session.token = {
+      userID: username
+    }
+
+    res.cookie('tokenExists', 'true', {
+      expires: new Date(new Date().getTime() + 100 * 1000),
+      httpOnly: false
+    }).sendStatus(200)
+  } else {
+    res.sendStatus(401)
+  }
+}
+
 module.exports = {
-  createUser
+  createUser,
+  verifyUser
 }
