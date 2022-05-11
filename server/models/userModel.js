@@ -13,7 +13,7 @@ async function insertUser (user) {
   }
 }
 
-async function getUser (user) {
+async function getUser (username) {
   try {
     const result = await pool.query('SELECT * FROM users where user_name = $1 RETURNING user_id', [username])
     return [null, result.rows[0]]
