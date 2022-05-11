@@ -1,0 +1,4 @@
+GITPASS=<git user's password>
+GITSERVER=<git server domain/ip>
+UI_ROOT=<frontend's url>
+
