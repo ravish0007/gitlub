@@ -1,3 +1,7 @@
-const repoRoute  = require('./repoRoute.js')
+const repoRoute = require('./repoRoute')
+const authRoute = require('./authRoute')
 
-module.exports = { repoRoute }
+module.exports = {
+  repoRoute,
+  authRoute
+}
