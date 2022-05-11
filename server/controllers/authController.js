@@ -10,7 +10,7 @@ async function createUser (req, res) {
   }
 
   // check for duplicate username in the db
-  const [error, duplicateUser] = await db.getUser(username)
+  const [error, duplicateUser] = await userModel.getUser(username)
 
   if (duplicateUser.length) {
     return res.sendStatus(409) // Conflict
@@ -19,7 +19,7 @@ async function createUser (req, res) {
   try {
     const passwordHash = await bcrypt.hash(password, 10)
     const newUser = { name: username, passwordHash, sshKey }
-    await db.insertUser(newUser)
+    await userModel.insertUser(newUser)
     res.status(201).json({ success: `New user ${username} created!` })
   } catch (err) {
     res.status(500).json({ message: err.message })

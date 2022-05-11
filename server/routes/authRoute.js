@@ -4,6 +4,6 @@ const { authController } = require('../controllers')
 
 const router = Router()
 
-router.get('/new', authController.createUser)
+router.post('/new', authController.createUser)
 
 module.exports = router
