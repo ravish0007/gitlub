@@ -1,0 +1,18 @@
+/* @tailwind base; */
+/* @tailwind components; */
+/* @tailwind utilities; */
+
+
+.repolink {
+  display: block;
+  cursor: pointer;
+}
+
+.logs {
+  color: red;
+}
+
+.clone {
+  color: green;
+}
+
