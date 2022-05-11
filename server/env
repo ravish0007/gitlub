@@ -9,5 +9,8 @@ SESSION_SECRET=<session secret>
 
 GITPASS=<git user's password>
 GITSERVER=<git server domain/ip>
+
+AGENT_PUB_KEY=<server user's pub key>
+
 UI_ROOT=<frontend's url>
 
