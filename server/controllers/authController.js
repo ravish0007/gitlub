@@ -44,8 +44,8 @@ async function verifyUser (req, res) {
   const match = await bcrypt.compare(password, user.password)
   if (match) {
     // create session
-    req.session.token = {
-      userID: username
+    req.session.user = {
+      name: username
     }
 
     res.cookie('tokenExists', 'true', {
