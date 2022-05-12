@@ -5,7 +5,7 @@ async function verifyUser (req, res, next) {
     return res.clearCookie('tokenExists').redirect(process.env.UI_ROOT)
   }
 
-  req.locals.user = user
+  res.locals.user = user
   next()
 }
 

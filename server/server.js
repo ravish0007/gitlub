@@ -22,7 +22,6 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 
 app.use('/api/auth', authRoute)
-app.use('/api/repo', repoRoute)
-// app.use('/api/repo', verifyUser, repoRoute)
+app.use('/api/repo', verifyUser, repoRoute)
 
 app.listen(5000, () => console.log('listening on 5000'))
