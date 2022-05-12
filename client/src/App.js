@@ -1,24 +1,21 @@
 import { useState, useEffect } from 'react'
 
-import axios from 'axios'
-
-import NewRepo from './components/NewRepo'
-import ListRepos from './components/ListRepos'
+import Login from './components/Login'
 
 export default function App () {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [user, setUser] = useState({})
   const [repos, setRepos] = useState([])
 
-  useEffect(() => {
-    axios.get('http://192.168.0.110:5000/repos').then(result => {
-      setRepos(result.data.message)
-    }).catch(err => console.log(JSON.stringify(err)))
-  }, [])
+  if (!isLoggedIn) {
+    return (
+      <Login
+        setLoginStatus={setIsLoggedIn}
+      />
+    )
+  }
 
   return (
-    <h1 className='text-3xl font-bold underline'>
-      <NewRepo setRepos={setRepos} />
-      <ListRepos repos={repos} />
-
-    </h1>
+    <h1> logged in </h1>
   )
 }
