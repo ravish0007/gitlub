@@ -2,15 +2,17 @@
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
-const GIT_EXEC = `sshpass -p ${process.env.GITPASS} ssh git@${process.env.GITSERVER}`
+const gitExec = (user) => `ssh ${user}@${process.env.GITSERVER}`
 
 async function createRepository (req, res) {
   if (!req.body.repository) {
     return res.send(400).json({ message: 'repository not found' })
   }
 
+  const username = res.locals.user.name
+
   try {
-    const { stdout, stderr } = await exec(`${GIT_EXEC} newrepo ${req.body.repository}`)
+    const { stdout, stderr } = await exec(`${gitExec(username)} newrepo ${req.body.repository}`)
 
     if (stderr) {
       return res.send(449).json({ message: `${stderr}` })
@@ -24,7 +26,8 @@ async function createRepository (req, res) {
 
 async function listRepositories (req, res) {
   try {
-    const { stdout, stderr } = await exec(`${GIT_EXEC} listrepos`)
+    const username = res.locals.user.name
+    const { stdout, stderr } = await exec(`${gitExec(username)} listrepos`)
 
     if (stderr) {
       return res.send(449).json({ message: `${stderr}` })
@@ -42,7 +45,8 @@ async function sendGitLog (req, res) {
   }
 
   try {
-    const { stdout, stderr } = await exec(`${GIT_EXEC} logrepo ${req.params.repository}`)
+    const username = res.locals.user.name
+    const { stdout, stderr } = await exec(`${gitExec(username)} logrepo ${req.params.repository}`)
 
     return res.status(200).send({ log: stdout })
   } catch (err) {
