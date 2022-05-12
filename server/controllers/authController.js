@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt')
 
 const { userModel } = require('../models')
 
+const setupUser = require('../utils/setupUser')
+
 async function createUser (req, res) {
   const { username, password, sshKey } = req.body
 
@@ -20,6 +22,7 @@ async function createUser (req, res) {
     const passwordHash = await bcrypt.hash(password, 10)
     const newUser = { name: username, passwordHash, sshKey }
     await userModel.insertUser(newUser)
+    await setupUser(newUser)
     res.status(201).json({ success: `New user ${username} created!` })
   } catch (err) {
     res.status(500).json({ message: err.message })
