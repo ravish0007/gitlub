@@ -58,4 +58,28 @@ async function sendGitLog (req, res) {
   }
 }
 
-module.exports = { createRepository, listRepositories, sendGitLog }
+async function serveContent (req, res) {
+  if (!req.params.repository) {
+    return res.send(400).json({ message: 'repository not found' })
+  }
+
+  try {
+    const username = res.locals.user.name
+    const { stdout, stderr } = await exec(`${gitExec(username)} fetchcontent ${req.params.repository} ${req.params[0] || ''}`)
+    return res.status(200).send({ output: stdout })
+  } catch (err) {
+    console.log(err)
+    if (err.stderr) {
+      return res.status(404).send({ message: 'no content' })
+    }
+    return res.status(500).send({ message: `${err}` })
+  }
+}
+
+module.exports = {
+  createRepository,
+  listRepositories,
+  sendGitLog,
+  serveContent
+
+}
