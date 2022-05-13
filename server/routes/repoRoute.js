@@ -7,6 +7,6 @@ const router = Router()
 router.get('/list', repoController.listRepositories)
 router.post('/new', repoController.createRepository)
 router.get('/log/:repository', repoController.sendGitLog)
-router.get('/tree/:tree?', repoController.serveContent)
+router.get('/tree/:repository/*', repoController.serveContent)
 
 module.exports = router

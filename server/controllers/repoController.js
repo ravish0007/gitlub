@@ -46,7 +46,7 @@ async function sendGitLog (req, res) {
 
   try {
     const username = res.locals.user.name
-    const { stdout, stderr } = await exec(`${gitExec(username)} logrepo ${req.params.repository || ''}`)
+    const { stdout, stderr } = await exec(`${gitExec(username)} logrepo ${req.params.repository}`)
 
     return res.status(200).send({ log: stdout })
   } catch (err) {
@@ -59,13 +59,14 @@ async function sendGitLog (req, res) {
 }
 
 async function serveContent (req, res) {
-  if (!req.params.tree) {
-    return res.send(400).json({ message: 'tree not found' })
+  if (!req.params.repository) {
+    return res.send(400).json({ message: 'repository not found' })
   }
 
   try {
-    const { stdout, stderr } = await exec(`${gitExec(username)} fetchcontent ${req.params.tree}`)
-    return res.status(200).send({ log: stdout })
+    const username = res.locals.user.name
+    const { stdout, stderr } = await exec(`${gitExec(username)} fetchcontent ${req.params.repository} ${req.params[0] || ''}`)
+    return res.status(200).send({ output: stdout })
   } catch (err) {
     console.log(err)
     if (err.stderr) {
