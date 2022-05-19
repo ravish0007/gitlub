@@ -8,7 +8,9 @@ async function createUser (req, res) {
   const { username, password, sshKey } = req.body
 
   if (!username || !password || !sshKey) {
-    return res.status(400).json({ message: 'Username, password and ssh-key are required.' })
+    return res
+      .status(400)
+      .json({ message: 'Username, password and ssh-key are required.' })
   }
 
   // check for duplicate username in the db
@@ -32,7 +34,11 @@ async function createUser (req, res) {
 async function verifyUser (req, res) {
   const { username, password } = req.body
 
-  if (!username || !password) return res.status(400).json({ message: 'Username and password are required.' })
+  if (!username || !password) {
+    return res
+      .status(400)
+      .json({ message: 'Username and password are required.' })
+  }
 
   const [error, foundUser] = await userModel.getUser(username)
 
@@ -48,10 +54,12 @@ async function verifyUser (req, res) {
       name: username
     }
 
-    res.cookie('tokenExists', 'true', {
-      expires: new Date(new Date().getTime() + 100 * 1000),
-      httpOnly: false
-    }).sendStatus(200)
+    res
+      .cookie('tokenExists', 'true', {
+        expires: new Date(new Date().getTime() + 100 * 1000),
+        httpOnly: false
+      })
+      .sendStatus(200)
   } else {
     res.sendStatus(401)
   }

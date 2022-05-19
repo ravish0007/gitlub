@@ -1,4 +1,3 @@
-
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
@@ -12,7 +11,9 @@ async function createRepository (req, res) {
   const username = res.locals.user.name
 
   try {
-    const { stdout, stderr } = await exec(`${gitExec(username)} newrepo ${req.body.repository}`)
+    const { stdout, stderr } = await exec(
+      `${gitExec(username)} newrepo ${req.body.repository}`
+    )
 
     if (stderr) {
       return res.send(449).json({ message: `${stderr}` })
@@ -46,7 +47,9 @@ async function sendGitLog (req, res) {
 
   try {
     const username = res.locals.user.name
-    const { stdout, stderr } = await exec(`${gitExec(username)} logrepo ${req.params.repository}`)
+    const { stdout, stderr } = await exec(
+      `${gitExec(username)} logrepo ${req.params.repository}`
+    )
 
     return res.status(200).send({ log: stdout })
   } catch (err) {
@@ -65,7 +68,11 @@ async function serveContent (req, res) {
 
   try {
     const username = res.locals.user.name
-    const { stdout, stderr } = await exec(`${gitExec(username)} fetchcontent ${req.params.repository} ${req.params[0] || ''}`)
+    const { stdout, stderr } = await exec(
+      `${gitExec(username)} fetchcontent ${req.params.repository} ${
+        req.params[0] || ''
+      }`
+    )
     return res.status(200).send({ output: stdout })
   } catch (err) {
     console.log(err)
@@ -81,5 +88,4 @@ module.exports = {
   listRepositories,
   sendGitLog,
   serveContent
-
 }
