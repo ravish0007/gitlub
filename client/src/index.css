@@ -2,17 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-
-.repolink {
-  display: block;
-  cursor: pointer;
+.folder {
+  display: inline;
+  @apply text-sky-600;
 }
 
-.logs {
-  color: red;
+.file {
+  display: inline;
 }
-
-.clone {
-  color: green;
-}
-
