@@ -13,6 +13,22 @@ class GitLubService {
   static async verifyUser (user) {
     return await axios.post(`${BASE_URL}/auth/signin`, user)
   }
+
+  static async getRepos () {
+    return await axios.get(`${BASE_URL}/repo/list`)
+  }
+
+  static async newRepo (repository) {
+    return await axios.post(`${BASE_URL}/repo/new`, { repository })
+  }
+
+  static async fetchTree (repository, path = '') {
+    return await axios.get(`${BASE_URL}/repo/tree/${repository}/${path}`)
+  }
+
+  static async getUser () {
+    return await axios.get(`${BASE_URL}/auth/user`)
+  }
 }
 
 export default GitLubService
