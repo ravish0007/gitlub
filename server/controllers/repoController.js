@@ -73,11 +73,20 @@ async function serveContent (req, res) {
         req.params[0] || ''
       }`
     )
-    return res.status(200).send({ output: stdout })
+
+    let treeOutput = stdout.split('\n')
+    if (stdout.startsWith('tree')) {
+      treeOutput.splice(0, 2)
+      treeOutput = treeOutput.filter(x => x != '')
+    } else {
+      treeOutput = stdout
+    }
+
+    return res.status(200).send({ output: treeOutput })
   } catch (err) {
     console.log(err)
     if (err.stderr) {
-      return res.status(404).send({ message: 'no content' })
+      return res.status(200).send({ output: [] })
     }
     return res.status(500).send({ message: `${err}` })
   }

@@ -16,7 +16,7 @@ const app = express()
 
 app.use(cors({ origin: process.env.UI_ROOT, credentials: true }))
 
-app.use(cookieSession({ secret: process.env.SESSION_SECRET, httpOnly: true, sameSite: 'strict' }))
+app.use(cookieSession({ secret: process.env.SESSION_SECRET, httpOnly: true }))
 app.use(cookieParser())
 
 app.use(bodyParser.json())

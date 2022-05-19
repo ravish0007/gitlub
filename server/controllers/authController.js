@@ -4,6 +4,10 @@ const { userModel } = require('../models')
 
 const setupUser = require('../utils/setupUser')
 
+async function sendUser (req, res) {
+  return res.send(req.session.user)
+}
+
 async function createUser (req, res) {
   const { username, password, sshKey } = req.body
 
@@ -54,11 +58,10 @@ async function verifyUser (req, res) {
       name: username
     }
 
-    res
-      .cookie('tokenExists', 'true', {
-        expires: new Date(new Date().getTime() + 100 * 1000),
-        httpOnly: false
-      })
+    res.cookie('user', username, {
+      expires: new Date(new Date().getTime() + 100 * 1000),
+      httpOnly: false
+    })
       .sendStatus(200)
   } else {
     res.sendStatus(401)
@@ -67,5 +70,6 @@ async function verifyUser (req, res) {
 
 module.exports = {
   createUser,
-  verifyUser
+  verifyUser,
+  sendUser
 }
