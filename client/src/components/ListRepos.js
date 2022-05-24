@@ -1,38 +1,44 @@
-import { useState, useEffect } from 'react'
-
-import Repo from './Repo'
-import NewRepo from './NewRepo.js'
-
-import gitlubService from '../gitlubService'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 export default function ListRepos ({ repos, setRepos }) {
-  const [showRepos, setShowRepos] = useState(true)
-  const [user, setUser] = useState('')
+  const [filterInput, setFilterInput] = useState('')
 
-  useEffect(() => {
-    gitlubService
-      .getUser()
-      .then((result) => {
-        setUser(result.data.name)
-      })
-      .catch((err) => console.log(JSON.stringify(err)))
-  }, [])
-
-  if (!showRepos) {
-    return (
-      <>
-        <NewRepo />
-      </>
-    )
-  }
+  const filteredRepos = filterInput ? repos.filter(repo => repo.startsWith(filterInput)) : repos
 
   return (
-    <div className='my-20'>
-      <div className='mx-auto'>
-        <NewRepo setRepos={setRepos} />
+    <div className='my-20 w-1/2 mx-auto'>
+
+      <div className='space-x-2'>
+        <input
+          className='p-2 border-2 rounded-md border-slate-300 focus:outline-none focus:border-sky-600'
+          type='text'
+          placeholder='Filter repositories'
+          value={filterInput}
+          onChange={(e) => setFilterInput(e.target.value)}
+        />
+
+        <Link to='/new'>
+          <button
+            type='submit'
+            className='p-2 text-white rounded-md bg-green-600 hover:bg-green-700'
+            value='Create new repository'
+          >
+            New
+          </button>
+        </Link>
+
       </div>
-      {repos.map((repo) => {
-        return <Repo repo={repo} user={user} />
+
+      {filteredRepos.map((repo) => {
+        return (
+          <Link
+            className='block text-2xl font-semibold text-blue-600 my-6 p-4 border border-slate-300 rounded hover:underline hover:bg-gray-100'
+            to={'/tree/' + repo}
+          >
+            {repo}
+          </Link>
+        )
       })}
     </div>
   )

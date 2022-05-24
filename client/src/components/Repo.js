@@ -1,44 +1,25 @@
 import { useState, useEffect } from 'react'
 
+import ReactMarkdown from 'react-markdown'
+
 import Tree from './Tree'
 import Code from './Code'
 
+import ViewTree from './ViewTree'
+
 import gitlubService from '../gitlubService'
+import { useParams, Link } from 'react-router-dom'
 
-function viewtree (user, tree, repo, appendPwd, backLevel) {
-  return (
-    <>
-      <p className='p-4 rounded-md bg-gray-100 text-slate-500'>
-        git clone {user}@192.168.0.110:{repo}
-      </p>
+export default function Repo ({ user }) {
+  const { repo } = useParams()
 
-
-
-      <div className='rounded-md border border-slate-300'>
-        <div
-          className='py-2 px-4 text-slate-500 text-2xl  hover:text-sky-600 w-full hover:bg-gray-100'
-          onClick={backLevel}
-        >
-          ..
-        </div>
-        {Array.isArray(tree)
-          ? (
-            <Tree content={tree} addPath={appendPwd} />
-            )
-          : (
-            <Code content={tree} />
-            )}
-      </div>
-    </>
-  )
-}
-
-export default function Repo ({ user, repo }) {
-  const [show, setShow] = useState(false)
+  const [commits, setCommits] = useState([])
+  const [readme, setReadme] = useState('')
   const [tree, setTree] = useState([])
   const [pwd, setPwd] = useState('')
 
   function appendPwd (content) {
+    console.log(pwd === '' ? content : pwd + '/' + content)
     setPwd(pwd === '' ? content : pwd + '/' + content)
   }
 
@@ -47,27 +28,66 @@ export default function Repo ({ user, repo }) {
   }
 
   useEffect(() => {
-    if(!show) return
+    gitlubService.fetchLog(repo).then(result => {
+      if (!result.data.log) return
 
+      const commits = result.data.log.split('\n').map(log => {
+        const [user, message, time] = log.split('::')
+        return { user, message, time }
+      })
+      setCommits(commits)
+    })
+  }, [])
+
+  useEffect(() => {
     gitlubService
       .fetchTree(repo, pwd)
       .then((result) => {
         console.log(result.data)
+        if (result.data.output.includes('README.md')) {
+          const README = (pwd ? pwd + '/' : '') + 'README.md'
+          gitlubService
+            .fetchTree(repo, README)
+            .then((result) => {
+              console.log(README)
+              setReadme(result.data.output)
+            })
+            .catch((err) => console.log(JSON.stringify(err)))
+        } else {
+          setReadme('')
+        }
         setTree(result.data.output)
       })
       .catch((err) => console.log(JSON.stringify(err)))
-  }, [pwd, show])
+  }, [pwd])
 
   return (
-    <div className='w-1/2 mx-auto mt-10 space-y-4'>
-      <p
-        className='font-bold pointer-cursor text-sky-600 text-2xl hover:underline'
-        onClick={() => setShow(!show)}
-      >
-        {repo}
-      </p>
+    <div className='my-10 space-y-4 mx-auto w-2/3'>
+
+      <div className='flex flex-row justify-between'>
+        <span
+          className='font-bold pointer-cursor text-sky-600 text-2xl'
+        >
+          {repo}
+        </span>
+
+        <Link to={'/commits/' + repo}>
+          <span className='p-2 border rounded-md cursor-pointer bg-gray-50 hover:bg-gray-100'>
+            {commits.length} commits
+          </span>
+        </Link>
+      </div>
+
       <div className='border boder-slate-500' />
-      {show && viewtree(user, tree, repo, appendPwd, backLevel)}
+      <ViewTree
+        user={user}
+        tree={tree}
+        repo={repo}
+        appendPwd={appendPwd}
+        backLevel={backLevel}
+      />
+      {readme &&
+        <ReactMarkdown children={readme} className='border rounded-md border-sky-600 p-4' />}
     </div>
   )
 }
