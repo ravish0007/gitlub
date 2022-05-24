@@ -2,7 +2,7 @@ import axios from 'axios'
 
 axios.defaults.withCredentials = true
 
-const BASE_URL = 'http://192.168.0.110:5000/api'
+const BASE_URL = 'http://192.168.0.100:5000/api'
 
 class GitLubService {
   static async registerUser (user) {
@@ -24,6 +24,10 @@ class GitLubService {
 
   static async fetchTree (repository, path = '') {
     return await axios.get(`${BASE_URL}/repo/tree/${repository}/${path}`)
+  }
+
+  static async fetchLog (repository) {
+    return await axios.get(`${BASE_URL}/repo/log/${repository}`)
   }
 
   static async getUser () {
