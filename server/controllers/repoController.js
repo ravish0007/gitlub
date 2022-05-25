@@ -48,7 +48,7 @@ async function sendGitLog (req, res) {
   try {
     const username = res.locals.user.name
     const { stdout, stderr } = await exec(
-      `${gitExec(username)} logrepo ${req.params.repository}`
+      `${gitExec(username)} fetchcommits ${req.params.repository}`
     )
 
     return res.status(200).send({ log: stdout })
