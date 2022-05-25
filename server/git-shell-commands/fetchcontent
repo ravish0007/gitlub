@@ -10,5 +10,19 @@ fi
 if [[ -d "$HOME/$repo" ]]
 then
     cd "$HOME/$repo"
-    git show master:$2
+    
+    FILES=$(git show master:$2) 
+
+    if echo $FILES | grep -q ^tree ; then 
+      for f in $FILES; do 
+        path=$2/$f
+        if[ -n "$2" ]; then
+          path=$f
+        fi
+        str=$(git log -1 --pretty=format:"%cr::%s" master -- $path)
+        echo $f::$str
+      done
+    else
+      git show master:$2
+    fi
 fi
