@@ -1,0 +1,13 @@
+#!/bin/bash
+repo=$1
+
+if [[ ! $repo == *.git ]];
+then 
+  repo+=".git"
+fi
+
+if [[ -d "$HOME/$repo" ]]
+then
+	cd "$HOME/$repo"
+	git --no-pager show --pretty=format: $2 
+fi
