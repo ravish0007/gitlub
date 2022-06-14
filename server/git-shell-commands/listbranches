@@ -1,0 +1,14 @@
+#!/bin/bash
+
+repo=$1
+
+if [[ ! $repo == *.git ]];
+then 
+  repo+=".git"
+fi
+
+if [[ -d "$HOME/$repo" ]]
+then
+    cd "$HOME/$repo"
+    git branch --format '%(refname)' | cut -d '/' -f 3
+fi
