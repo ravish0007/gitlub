@@ -10,5 +10,5 @@ fi
 if [[ -d "$HOME/$repo" ]]
 then
     cd "$HOME/$repo"
-    git --no-pager log --branches='master*' --pretty='format:%an::%s::%ar'
+    git --no-pager log --branches="$2*" --pretty='format:%an::%s::%ar::%h'
 fi

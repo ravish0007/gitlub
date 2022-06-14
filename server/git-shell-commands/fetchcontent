@@ -1,5 +1,4 @@
 #!/bin/bash
-
 repo=$1
 
 if [[ ! $repo == *.git ]];
@@ -9,20 +8,21 @@ fi
 
 if [[ -d "$HOME/$repo" ]]
 then
-    cd "$HOME/$repo"
-    
-    FILES=$(git show master:$2) 
+  cd "$HOME/$repo"
+	FILES=$(git show $2:$3) 
 
-    if echo $FILES | grep -q ^tree ; then 
-      for f in $FILES; do 
-        path=$2/$f
-        if[ -n "$2" ]; then
-          path=$f
-        fi
-        str=$(git log -1 --pretty=format:"%cr::%s" master -- $path)
-        echo $f::$str
-      done
-    else
-      git show master:$2
-    fi
+	if echo $FILES | grep -q ^tree ; then 
+		for f in $FILES; do 
+			path=$f
+			if [[ -n "$3"  ]]; then
+				path=$3/$f
+			fi
+
+			str=$(git log -1 --pretty=format:"%cr::%s" $2 -- $path)
+			echo $f::$str
+		done
+	else
+		git show $2:$3
+	fi
+
 fi
