@@ -1,5 +1,4 @@
 #!/bin/bash
-
 repo=$1
 
 if [[ ! $repo == *.git ]];
@@ -9,6 +8,6 @@ fi
 
 if [[ -d "$HOME/$repo" ]]
 then
-    cd "$HOME/$repo"
-    git --no-pager log --branches="$2*" --pretty='format:%an::%s::%ar::%h'
+	cd "$HOME/$repo"
+	git --no-pager show --pretty=format: $2 
 fi
